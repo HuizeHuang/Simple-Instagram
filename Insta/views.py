@@ -5,6 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from Insta.forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 class HelloWorld(TemplateView):
@@ -15,20 +16,21 @@ class PostView(ListView):
     model = Post
     template_name = 'index.html'
 
-    def get_queryset(self):
-        '''we are overriding the super function in the ListView to 
-        redefine the object_list (post objects) that is going to be passed to index.html'''
-        following_users = set()
-        current_user = self.request.user
+    # @login_required
+    # def get_queryset(self):
+    #     '''we are overriding the super function in the ListView to 
+    #     redefine the object_list (post objects) that is going to be passed to index.html'''
+    #     following_users = set()
+    #     current_user = self.request.user
 
-        # it's equivalent to the query:
-        # SELECT to_user FROM UserConnection WHERE from_user = current_user
-        for conn in UserConnection.objects.filter(from_user = current_user).select_related('to_user'):
-            following_users.add(conn.to_user)
+    #     # it's equivalent to the query:
+    #     # SELECT to_user FROM UserConnection WHERE from_user = current_user
+    #     for conn in UserConnection.objects.filter(from_user = current_user).select_related('to_user'):
+    #         following_users.add(conn.to_user)
 
-        # it's equivalent to the query:
-        # WHERE author IN following_users
-        return Post.objects.filter(author__in = following_users)
+    #     # it's equivalent to the query:
+    #     # WHERE author IN following_users
+    #     return Post.objects.filter(author__in = following_users)
 
 
 class PostDetailView(DetailView):
