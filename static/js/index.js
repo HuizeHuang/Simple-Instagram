@@ -127,7 +127,7 @@ function follow_user(success_cb, error_cb, type) {
   
     $.ajax({
       type: "POST",
-      url: '/togglefollow',
+      url: '/follow',
       data: {
         follow_user_pk: follow_user_pk,
         type: type

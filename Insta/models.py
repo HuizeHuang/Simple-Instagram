@@ -44,7 +44,7 @@ class UserConnection(models.Model):
         related_name='to_connections'
     )
     def __str__(self):
-        return from_user.username + " follows " + to_user.username
+        return self.from_user.username + " follows " + self.to_user.username
 
 
 class Post(models.Model):
