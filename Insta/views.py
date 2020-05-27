@@ -53,7 +53,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):  # LoginRequiredMixin must be before CreateView
     model = Post
     template_name = 'post_create.html'
-    fields = "__all__"
+    fields = ['title', 'image']
     login_url = "login"
 
 
