@@ -35,7 +35,7 @@
             <ul class="comment-list">
                 {% for comment in object.comments.all %}
                 <li class="comment-list__comment">
-                    <a href="{% url 'helloworld' %}" class="user">
+                    <a href="{% url 'user_detail' comment.user.id %}" class="user">
                         {{ comment.user.username }}
                     </a>
                     <span class="comment">{{ comment.comment }}</span>
@@ -43,31 +43,42 @@
                 {% endfor %}
             </ul>
             <section class="input-row">
-                <i class="fa {% has_user_liked_post object.author object %} submit-like" aria-hidden="true"></i>
-                <div class="comment-input-wrapper">
-                    <input class="add-comment" type="text" placeholder="Add a comment...">
-                </div>
-                <div class="hidden-data {{ object.pk }}" style="display: none;">
-                    <span class="post-pk">{{ object.pk }}</span>
-                </div>
+                {% if request.user.is_authenticated %}
+                    <i class="fa {% has_user_liked_post user post %} submit-like" aria-hidden="true"></i>
+                    <div class="comment-input-wrapper">
+                        <input class="add-comment" type="text" placeholder="Add a comment...">
+                    </div>
+                    <div class="hidden-data {{ post.pk }}" style="display: none;">
+                        <span class="post-pk">{{ post.pk }}</span>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}"><i class="fa fa-heart-o submit-like-visitor" aria-hidden="true"></i></a>
+                    <div class="comment-input-wrapper">
+                        <input class="add-comment-visitor" type="text" placeholder="Add a comment...">
+                    </div>
+                    <div class="hidden-data {{ post.pk }}" style="display: none;">
+                        <span class="post-pk">{{ post.pk }}</span>
+                    </div>
+                {% endif %}
             </section>
 
-            
-            <div class='update-post'>
-                {% if user == object.author %}
-                <a class="edit-desktop" href="{% url 'post_update' object.pk %}">
-                    Update Post
-                </a>
-                {% endif %}
-            </div>
+            {% if request.user.is_authenticated %}
+                <div class='update-post'>
+                    {% if user == object.author %}
+                    <a class="edit-desktop" href="{% url 'post_update' object.pk %}">
+                        Update Post
+                    </a>
+                    {% endif %}
+                </div>
 
-            <div class='delete-post'>
-                {% if user == object.author %}
-                <a class="edit-desktop" href="{% url 'post_delete' object.pk %}">
-                    Delete Post
-                </a>
+                <div class='delete-post'>
+                    {% if user == object.author %}
+                    <a class="edit-desktop" href="{% url 'post_delete' object.pk %}">
+                        Delete Post
+                    </a>
+                {% endif %}
+                </div>
             {% endif %}
-            </div>
            
         </div>
     </div>

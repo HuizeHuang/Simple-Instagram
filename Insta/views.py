@@ -42,11 +42,12 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        liked = Like.objects.filter(post=self.kwargs.get('pk'), user=self.request.user).first()
-        if liked:
-            data['liked'] = 1
-        else:
-            data['liked'] = 0
+        if self.request.user.is_authenticated:
+            liked = Like.objects.filter(post=self.kwargs.get('pk'), user=self.request.user).first()
+            if liked:
+                data['liked'] = 1
+            else:
+                data['liked'] = 0
         return data
 
 
@@ -109,6 +110,7 @@ class ExploreView(ListView):
     def get_queryset(self):
         return Post.objects.all().order_by('-posted_on')[:20]
 
+
 @ajax_request  #this is an ajax request, showing it doesn't need to render a template
 def toggleLike(request):
     '''come from index.js in static/js'''
@@ -128,6 +130,7 @@ def toggleLike(request):
         'result': result, 
         'post_pk': post_pk
     }
+
 
 @ajax_request
 def addComment(request):

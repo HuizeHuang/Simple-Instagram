@@ -45,7 +45,7 @@
                         <ul class="comment-list">
                             {% for comment in post.comments.all %}
                                 <li class="comment-list__comment">
-                                    <a href="{% url 'post_detail' post.author.id %}" class='user'>
+                                    <a href="{% url 'user_detail' comment.user.id %}" class='user'>
                                         {{comment.user.username}}:
                                     </a>
                                     <span class="comment">{{comment.comment}}</span>
@@ -54,13 +54,23 @@
                         </ul>
 
                         <section class="input-row">
-                            <i class="fa {% has_user_liked_post user post %} submit-like" aria-hidden="true"></i>
-                            <div class="comment-input-wrapper">
-                                <input class="add-comment" type="text" placeholder="Add a comment...">
-                            </div>
-                            <div class="hidden-data {{ post.pk }}" style="display: none;">
-                                <span class="post-pk">{{ post.pk }}</span>
-                            </div>
+                            {% if request.user.is_authenticated %}
+                                <i class="fa {% has_user_liked_post user post %} submit-like" aria-hidden="true"></i>
+                                <div class="comment-input-wrapper">
+                                    <input class="add-comment" type="text" placeholder="Add a comment...">
+                                </div>
+                                <div class="hidden-data {{ post.pk }}" style="display: none;">
+                                    <span class="post-pk">{{ post.pk }}</span>
+                                </div>
+                            {% else %}
+                                <a href="{% url 'login' %}"><i class="fa fa-heart-o submit-like-visitor" aria-hidden="true"></i></a>
+                                <div class="comment-input-wrapper">
+                                    <input class="add-comment-visitor" type="text" placeholder="Add a comment...">
+                                </div>
+                                <div class="hidden-data {{ post.pk }}" style="display: none;">
+                                    <span class="post-pk">{{ post.pk }}</span>
+                                </div>
+                            {% endif %}
                         </section>
                     </div>
 

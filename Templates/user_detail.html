@@ -15,22 +15,27 @@
             <div class="col-xs-8 right">
                 <div class="name-buttons">
                     <h1 class="username">{{ object.username }}</h1>
-                    {% if user == object %}
-                        <a class="edit-desktop" href="{% url 'user_update' object.pk %}">
-                            <button class="edit-profile">Edit Profile</button>
-                        </a>
-                    {% else %}
-                        {% is_following user object as following %}
-                        <div class="follow-toggle__container">
-                            <button class="btn btn-primary {% if not following %}follow-user{% else %}unfollow-user{% endif %}" id="{{ object.pk }}">
-                                {% if following %}
-                                    Unfollow
-                                {% else %}
-                                    Follow
-                                {% endif %}
-                            </button>
-                        </div>
+                    {% if request.user.is_authenticated %}
+                        {% if user == object %}
+                            <a class="edit-desktop" href="{% url 'user_update' object.pk %}">
+                                <button class="edit-profile">Edit Profile</button>
+                            </a>
+                        {% else %}
+                            {% is_following user object as following %}
+                            <div class="follow-toggle__container">
+                                <button class="btn btn-primary {% if not following %}follow-user{% else %}unfollow-user{% endif %}" id="{{ object.pk }}">
+                                    {% if following %}
+                                        Unfollow
+                                    {% else %}
+                                        Follow
+                                    {% endif %}
+                                </button>
+                            </div>
+                        {% endif %}
+                            
                     {% endif %}
+
+                    
                 </div>
 
                 <div>

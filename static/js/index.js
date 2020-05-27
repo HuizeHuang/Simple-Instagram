@@ -105,14 +105,24 @@ function comment_update_view(data) {
     $post.closest('.view-update').find('.comment-list').append(commentHTML);
   }
   
-  $('.add-comment').on('keyup', function(e) {   //The keyup event is sent to an element when the user releases a key on the keyboard.
-    if (enterPressed(e)) {    // if "Enter" is presssed, return true
-      if (validComment($(this).val())) {
-        create_comment.call(this, comment_update_view, error_cb);
-        $(this).val('');
-      }
+$('.add-comment').on('keyup', function(e) {   //The keyup event is sent to an element when the user releases a key on the keyboard.
+  if (enterPressed(e)) {    // if "Enter" is presssed, return true
+    if (validComment($(this).val())) {
+      create_comment.call(this, comment_update_view, error_cb);
+      $(this).val('');
     }
-  });
+  }
+});
+
+
+$('.add-comment-visitor').on('keyup', function(e) {   //The keyup event is sent to an element when the user releases a key on the keyboard.
+  if (enterPressed(e)) {    // if "Enter" is presssed, return true
+    if (validComment($(this).val())) {
+      alert( "You haven't logged in yet. Plese log in first." );
+      $(this).val('');
+    }
+  }
+});
   
 
 /*
