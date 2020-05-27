@@ -4,8 +4,9 @@ from Insta.models import Post, Like, Comment, CustomUser, UserConnection
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from Insta.forms import CustomUserCreationForm
+from Insta.forms import CustomUserCreationForm, CustomPostCreationForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 
 class HelloWorld(TemplateView):
@@ -16,7 +17,6 @@ class PostView(ListView):
     model = Post
     template_name = 'index.html'
 
-    # @login_required
     def get_queryset(self):
         '''we are overriding the super function in the ListView to 
         redefine the object_list (post objects) that is going to be passed to index.html'''
@@ -51,10 +51,23 @@ class PostDetailView(DetailView):
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):  # LoginRequiredMixin must be before CreateView
-    model = Post
+    form_class = CustomPostCreationForm
     template_name = 'post_create.html'
-    fields = ['title', 'image']
     login_url = "login"
+
+    # https://www.agiliq.com/blog/2019/01/django-createview/
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self, *args, **kwargs):
+        '''return a dictionary with the kwargs that will be passed to the __init__ of your form.
+        '''
+        kwargs = super(PostCreateView, self).get_form_kwargs(*args, **kwargs)
+        kwargs['author'] = self.request.user
+        return kwargs
 
 
 class PostUpdateView(UpdateView):
@@ -66,7 +79,7 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'post_delete.html'
-    success_url = reverse_lazy("/")
+    success_url = reverse_lazy("posts")
 
 
 class SignUp(CreateView):

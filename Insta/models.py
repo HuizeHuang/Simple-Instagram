@@ -27,6 +27,12 @@ class CustomUser(AbstractUser):
         connections = get_followers(self)  # it returns connections, not users
         return connections.filter(from_user=user).exists()
 
+    def get_absolute_url(self):
+        '''
+        whenever the profile is updated, the link will be redirected to the url defined below
+        '''
+        return reverse("user_detail", args=[str(self.id)])  # find the full url based on the name provided
+
     def __str__(self):
         return self.username
 
@@ -64,6 +70,7 @@ class Post(models.Model):
     posted_on = models.DateTimeField(
         auto_now_add=True
     )
+
     def get_like_count(self):
         return self.likes.count()
     
