@@ -195,14 +195,31 @@ a:hover {
 
 .navbar {
   background-color: #fff;
-  border-bottom-color: #dbdbdb; }
+  border-bottom-color: #dbdbdb; 
+border: 0px;}
+  .navbar .navbar-list {
+    display: flex;
+    justify-content: flex-end;
+  }
+.navbar-brand {
+  font-family: cursive;
+  font-weight: bold;
+}
+
+.bottom-head{
+  display: flex;
+  justify-content: center;
+}
+#bottom-nav {
+  display: none; }
+
   .navbar .fa {
     font-size: 25px;
     color: #999999; }
     .navbar .fa.active {
       color: #333; }
-  .navbar .mobile {
-    display: none; }
+  .navbar .navbar-fixed-bottom{
+      display: none; }
     .navbar .mobile a, .navbar .mobile a:hover, .navbar .mobile a:focus {
       color: #333; }
     .navbar .mobile .col-xs-3 {
@@ -224,17 +241,17 @@ a:hover {
       cursor: pointer; }
   .navbar#mobile-top-nav .new-message {
     float: right; }
-  @media screen and (max-width: 768px) {
-    .navbar#main-nav {
-      top: initial;
-      bottom: 0;
-      margin: 0;
-      border-top: 1px solid #ccc; }
-    .navbar .desktop {
-      display: none; }
-    .navbar .mobile {
-      display: block; } }
-
+  @media screen and (max-width: 500px) {
+    #bottom-nav {
+      display: block; }
+    #main-nav {
+      display: none; } 
+    #navbar-main .navbar-list {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+   
 .back-button .fa {
   color: #333;
   margin-right: 15px; }

@@ -109,7 +109,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     comment = models.CharField(max_length=100)
-    posted_on = models.DateTimeField(auto_now=True)
+    posted_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Comment from ' + self.user.username + ': ' + self.comment

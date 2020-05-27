@@ -1,30 +1,62 @@
 <div class="navbar navbar-default navbar-fixed-top" id="main-nav">
     <div class="container desktop">
-        <div class="navbar-header">
-            <a href="{% url 'posts' %}" class="navbar-brand">Huize's Insta</a>
-        </div>
+        
+        <a href="/" class="navbar-brand">Mini Instagram</a>
 
         <div id="navbar-main">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right navbar navbar-list">
                 {% if request.user.is_authenticated %}
-                    <li>
+                    <li class="nav-ele">
                       <a href="{% url 'posts' %}">
                         <i class="fa fa-home {% if request.resolver_match.url_name == 'posts' %}active{% endif %}" aria-hidden="true"></i>
                       </a>
                     </li>
-                    <li><a href="{% url 'helloworld' %}"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                    <li><a href="{% url 'post_create' %}"><i class="fa fa-plus" aria-hidden="true"></i></a></li>
-                    <li><a href="{% url 'user_detail' user.id %}"><i class="fa fa-user" aria-hidden="true"></i></a></li>
-                    <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <li class="nav-ele"><a href="{% url 'explore' %}"><i class="fa fa-search {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                    <li class="nav-ele"><a href="{% url 'post_create' %}"><i class="fa fa-plus {% if request.resolver_match.url_name == 'post_create' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                    <li class="nav-ele"><a href="{% url 'user_detail' user.id %}"><i class="fa fa-user {% if request.resolver_match.url_name == 'user_detail' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                    <li class="nav-ele"><a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
                 {% else %}
-                    <li>
+                    <li class="nav-ele">
                         <a href="{% url 'login' %}">login</a>
                     </li>
-                    <li>
+                    <li class="nav-ele"> 
                         <a href="{% url 'signup' %}">signup</a>
                     </li>
                 {% endif %}
             </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="bottom-nav">
+    <div class="navbar navbar-default navbar-center navbar-fixed-top bottom-head">
+        <a href="/" class="navbar-brand">Mini Instagram</a>
+    </div>
+    <div class="navbar navbar-default navbar-fixed-bottom" >
+        <div class="container desktop">
+            <div id="navbar-main">
+                <ul class="nav navbar-nav navbar-right navbar navbar-list">
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-ele">
+                          <a href="{% url 'posts' %}">
+                            <i class="fa fa-home {% if request.resolver_match.url_name == 'posts' %}active{% endif %}" aria-hidden="true"></i>
+                          </a>
+                        </li>
+                        <li class="nav-ele"><a href="{% url 'explore' %}"><i class="fa fa-search {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                        <li class="nav-ele"><a href="{% url 'post_create' %}"><i class="fa fa-plus {% if request.resolver_match.url_name == 'post_create' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                        <li class="nav-ele"><a href="{% url 'user_detail' user.id %}"><i class="fa fa-user {% if request.resolver_match.url_name == 'user_detail' %}active{% endif %}" aria-hidden="true"></i></a></li>
+                        <li class="nav-ele"><a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    {% else %}
+                        <li class="nav-ele">
+                            <a href="{% url 'login' %}">login</a>
+                        </li>
+                        <li class="nav-ele"> 
+                            <a href="{% url 'signup' %}">signup</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>

@@ -17,25 +17,37 @@ class PostView(ListView):
     template_name = 'index.html'
 
     # @login_required
-    # def get_queryset(self):
-    #     '''we are overriding the super function in the ListView to 
-    #     redefine the object_list (post objects) that is going to be passed to index.html'''
-    #     following_users = set()
-    #     current_user = self.request.user
+    def get_queryset(self):
+        '''we are overriding the super function in the ListView to 
+        redefine the object_list (post objects) that is going to be passed to index.html'''
+        if self.request.user.is_authenticated:
+            following_users = set()
+            current_user = self.request.user
 
-    #     # it's equivalent to the query:
-    #     # SELECT to_user FROM UserConnection WHERE from_user = current_user
-    #     for conn in UserConnection.objects.filter(from_user = current_user).select_related('to_user'):
-    #         following_users.add(conn.to_user)
+            # it's equivalent to the query:
+            # SELECT to_user FROM UserConnection WHERE from_user = current_user
+            for conn in UserConnection.objects.filter(from_user = current_user).select_related('to_user'):
+                following_users.add(conn.to_user)
 
-    #     # it's equivalent to the query:
-    #     # WHERE author IN following_users
-    #     return Post.objects.filter(author__in = following_users)
-
+            # it's equivalent to the query:
+            # WHERE author IN following_users
+            return Post.objects.filter(author__in = following_users)
+        else:
+            return super().get_queryset()
+    
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        liked = Like.objects.filter(post=self.kwargs.get('pk'), user=self.request.user).first()
+        if liked:
+            data['liked'] = 1
+        else:
+            data['liked'] = 0
+        return data
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):  # LoginRequiredMixin must be before CreateView
@@ -54,7 +66,7 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'post_delete.html'
-    success_url = reverse_lazy("posts")
+    success_url = reverse_lazy("/")
 
 
 class SignUp(CreateView):
@@ -75,6 +87,14 @@ class UserUpdateView(UpdateView):
     fields = ['profile_pic', 'username']
     login_url = 'login'
 
+
+class ExploreView(ListView):
+    model = Post
+    template_name = 'explore.html'
+    login_url = 'login'
+    
+    def get_queryset(self):
+        return Post.objects.all().order_by('-posted_on')[:20]
 
 @ajax_request  #this is an ajax request, showing it doesn't need to render a template
 def toggleLike(request):
